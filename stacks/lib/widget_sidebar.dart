@@ -12,14 +12,18 @@ import 'package:flutter/material.dart';
 
 class WidgetSidebars extends StatefulWidget {
   final bool isSidebarLeftVisible;
+  final bool isSidebarRightVisible;
   final Widget? left;
   final Widget central;
+  final Widget? right;
 
   const WidgetSidebars({
     Key? key,
     required this.isSidebarLeftVisible,
+    required this.isSidebarRightVisible,
     this.left,
     required this.central,
+    this.right,
   }) : super(key: key);
 
   @override
@@ -38,6 +42,12 @@ class WidgetSidebarsState extends State<WidgetSidebars> {
       isSidebarLeftVisible = false;
     }
 
+    bool isSidebarRightVisible = widget.isSidebarRightVisible;
+
+    if (widget.right == null) {
+      isSidebarRightVisible = false;
+    }
+
     return Stack(
       children: [
         // Left Sidebar
@@ -45,11 +55,16 @@ class WidgetSidebarsState extends State<WidgetSidebars> {
           color: Color.fromRGBO(234, 228, 226, 1),
           child: widget.left,
         ),
+        Container(
+          color: Color.fromRGBO(125, 250, 226, 1),
+          child: widget.right,
+          margin: const EdgeInsets.only(left: 300.0),
+        ),
         // Contingut Principal (central)
         AnimatedPositioned(
           duration: const Duration(milliseconds: millis),
           left: isSidebarLeftVisible ? width : 0,
-          right: 0,
+          right: isSidebarRightVisible ? width : 0,
           top: 0,
           bottom: 0,
           child: Container(
@@ -67,6 +82,7 @@ class WidgetSidebarsState extends State<WidgetSidebars> {
             child: widget.central,
           ),
         ),
+        // Left Sidebar
       ],
     );
   }
